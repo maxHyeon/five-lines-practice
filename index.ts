@@ -70,6 +70,7 @@ function moveHorizontal(dx: number) {
 function moveVertical(dy: number) {
   if (map[playery + dy][playerx] === Tile.FLUX
     || map[playery + dy][playerx] === Tile.AIR) {
+    1
     moveToTile(playerx, playery + dy);
   } else if (map[playery + dy][playerx] === Tile.KEY1) {
     remove(Tile.LOCK1);
@@ -112,14 +113,18 @@ function update() {
   }
 }
 
-function draw() {
+function createGraphics() {
   let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
   let g = canvas.getContext("2d");
 
   g.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawMap(g)
+  return g
+}
 
+function draw() {
+  let g = createGraphics();
+  drawMap(g)
   drawPlayer(g)
 }
 
