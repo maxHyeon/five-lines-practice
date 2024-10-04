@@ -72,9 +72,13 @@ interface Tile {
   drop(): void;
   rest(): void;
   isFalling(): boolean;
+  canFall(): boolean;
 }
 
 class Air implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   isFalling(): boolean {
     return false;
   }
@@ -144,6 +148,9 @@ class Air implements Tile {
   }
 }
 class Player implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   isFalling(): boolean {
     return false;
   }
@@ -214,6 +221,9 @@ class Player implements Tile {
 }
 
 class Flux implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   isFalling(): boolean {
     return false;
   }
@@ -285,6 +295,9 @@ class Flux implements Tile {
   }
 }
 class Unbreakable implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   isFalling(): boolean {
     return false;
   }
@@ -366,6 +379,9 @@ class Stone implements Tile {
   rest(): void {
     this.falling = new Resting();
   }
+  canFall(): boolean {
+    return true;
+  }
   isStoney(): boolean {
     return true;
   }
@@ -442,6 +458,9 @@ class Box implements Tile {
   rest(): void {
     this.falling = new Resting();
   }
+  canFall(): boolean {
+    return true;
+  }
   isStoney(): boolean {
     return false;
   }
@@ -508,6 +527,9 @@ class Box implements Tile {
 }
 
 class Key1 implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   drop(): void {
   }
   rest(): void {
@@ -580,6 +602,9 @@ class Key1 implements Tile {
   }
 }
 class Lock1 implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   drop(): void {
   }
   rest(): void {
@@ -648,6 +673,9 @@ class Lock1 implements Tile {
   }
 }
 class Key2 implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   drop(): void {
   }
   rest(): void {
@@ -720,6 +748,9 @@ class Key2 implements Tile {
   }
 }
 class Lock2 implements Tile {
+  canFall(): boolean {
+    return false;
+  }
   drop(): void {
   }
   rest(): void {
@@ -944,9 +975,7 @@ function updateMap() {
 }
 
 function updateTile(x: number, y: number) {
-  if ((map[y][x].isStoney())
-    && map[y + 1][x].isAir()
-    || (map[y][x].isBoxy())
+  if ((map[y][x].canFall())
     && map[y + 1][x].isAir()) {
     map[y][x].drop();
     map[y + 1][x] = map[y][x];
