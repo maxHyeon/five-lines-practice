@@ -73,9 +73,12 @@ interface Tile {
   rest(): void;
   isFalling(): boolean;
   canFall(): boolean;
+  update(x: number, y: number): void;
 }
 
 class Air implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -148,6 +151,8 @@ class Air implements Tile {
   }
 }
 class Player implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -221,6 +226,8 @@ class Player implements Tile {
 }
 
 class Flux implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -295,6 +302,8 @@ class Flux implements Tile {
   }
 }
 class Unbreakable implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -445,6 +454,15 @@ class Stone implements Tile {
   isLock2(): boolean {
     return false;
   }
+  update(x: number, y: number): void {
+    if (map[y + 1][x].isAir()) {
+      map[y][x].drop();
+      map[y + 1][x] = map[y][x];
+      map[y][x] = new Air();
+    } else if (map[y][x].isFalling()) {
+      map[y][x].rest();
+    }
+  }
 }
 
 class Box implements Tile {
@@ -524,9 +542,20 @@ class Box implements Tile {
   isLock2(): boolean {
     return false;
   }
+  update(x: number, y: number): void {
+    if (map[y + 1][x].isAir()) {
+      map[y][x].drop();
+      map[y + 1][x] = map[y][x];
+      map[y][x] = new Air();
+    } else if (map[y][x].isFalling()) {
+      map[y][x].rest();
+    }
+  }
 }
 
 class Key1 implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -602,6 +631,8 @@ class Key1 implements Tile {
   }
 }
 class Lock1 implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -673,6 +704,8 @@ class Lock1 implements Tile {
   }
 }
 class Key2 implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -748,6 +781,8 @@ class Key2 implements Tile {
   }
 }
 class Lock2 implements Tile {
+  update(): void {
+  }
   canFall(): boolean {
     return false;
   }
@@ -975,14 +1010,7 @@ function updateMap() {
 }
 
 function updateTile(x: number, y: number) {
-  if ((map[y][x].canFall())
-    && map[y + 1][x].isAir()) {
-    map[y][x].drop();
-    map[y + 1][x] = map[y][x];
-    map[y][x] = new Air();
-  } else if (map[y][x].isFalling()) {
-    map[y][x].rest();
-  }
+  map[y][x].update(x, y);
 }
 
 function createGraphics() {
